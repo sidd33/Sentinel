@@ -19,73 +19,213 @@ from src.dashboard_data import (
 )
 from src.rag_assistant import RiskPolicyRAG
 
-# Page Configuration
+# ---------------------------------------------------------
+# PAGE CONFIGURATION
+# ---------------------------------------------------------
 st.set_page_config(
-    page_title="SentinelPay | AI Risk Manager",
+    page_title="SentinelPay | AI Risk Manager Command Center",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling (Dark Glassmorphism Palette)
+# ---------------------------------------------------------
+# CUSTOM FINTECH DARK SOC AESTHETIC (CSS)
+# ---------------------------------------------------------
 st.markdown("""
 <style>
-    .main {
-        background-color: #0d1117;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    .stApp {
+        background-color: #0b0f17;
         color: #c9d1d9;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    .stMetric {
-        background: rgba(22, 27, 34, 0.8);
-        border: 1px solid rgba(48, 54, 61, 0.8);
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+    /* Header Styling */
+    .hero-container {
+        background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+        border: 1px solid rgba(56, 139, 253, 0.25);
+        border-radius: 12px;
+        padding: 24px 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
-    .metric-card {
-        background: linear-gradient(135deg, rgba(22,27,34,0.9) 0%, rgba(13,17,23,0.9) 100%);
-        border: 1px solid rgba(56, 139, 253, 0.3);
+    
+    .hero-title {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #ffffff;
+        margin-bottom: 4px;
+    }
+    
+    .hero-subtitle {
+        font-size: 15px;
+        color: #8b949e;
+        margin-bottom: 12px;
+    }
+    
+    .badge-prototype {
+        background: rgba(56, 139, 253, 0.15);
+        color: #58a6ff;
+        border: 1px solid rgba(56, 139, 253, 0.4);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+
+    .badge-ready {
+        background: rgba(35, 134, 54, 0.15);
+        color: #3fb950;
+        border: 1px solid rgba(35, 134, 54, 0.4);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* KPI Cards */
+    .kpi-card {
+        background: rgba(22, 27, 34, 0.7);
+        border: 1px solid rgba(48, 54, 61, 0.8);
+        border-radius: 10px;
+        padding: 18px 20px;
+        margin-bottom: 15px;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+    .kpi-card:hover {
+        border-color: rgba(56, 139, 253, 0.5);
+        transform: translateY(-2px);
+    }
+    .kpi-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #8b949e;
+        margin-bottom: 6px;
+    }
+    .kpi-value {
+        font-size: 26px;
+        font-weight: 800;
+        color: #f0f6fc;
+    }
+    .kpi-subtext {
+        font-size: 12px;
+        color: #3fb950;
+        margin-top: 4px;
+        font-weight: 500;
+    }
+
+    /* Value Pillars */
+    .pillar-card {
+        background: rgba(22, 27, 34, 0.5);
+        border: 1px solid rgba(48, 54, 61, 0.6);
         border-radius: 10px;
         padding: 20px;
-        margin-bottom: 15px;
+        height: 100%;
     }
-    .badge-success {
-        background-color: #238636;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
+    .pillar-num {
+        font-size: 20px;
+        font-weight: 800;
+        color: #58a6ff;
+        margin-bottom: 8px;
+    }
+    .pillar-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #f0f6fc;
+        margin-bottom: 6px;
+    }
+    .pillar-desc {
+        font-size: 13px;
+        color: #8b949e;
+        line-height: 1.5;
+    }
+
+    /* Architecture Flow */
+    .flow-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(13, 17, 23, 0.8);
+        border: 1px solid rgba(48, 54, 61, 0.8);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 20px 0;
+    }
+    .flow-node {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 10px 16px;
+        text-align: center;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
+        color: #c9d1d9;
     }
-    .badge-danger {
-        background-color: #da3633;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+    .flow-node.active {
+        border-color: #58a6ff;
+        color: #58a6ff;
+        box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
     }
-    .badge-warning {
-        background-color: #d29922;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
+    .flow-arrow {
+        color: #484f58;
+        font-weight: 800;
+        font-size: 16px;
     }
+
+    /* Disclaimer Box */
     .disclaimer-box {
-        background-color: rgba(210, 153, 34, 0.15);
-        border-left: 4px solid #d29922;
+        background-color: rgba(210, 153, 34, 0.1);
+        border-left: 3px solid #d29922;
         padding: 12px 16px;
         margin-bottom: 20px;
-        border-radius: 4px;
+        border-radius: 6px;
         color: #e3b341;
-        font-size: 14px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* Badges */
+    .badge-success {
+        background-color: rgba(35, 134, 54, 0.2);
+        color: #3fb950;
+        border: 1px solid rgba(35, 134, 54, 0.4);
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .badge-danger {
+        background-color: rgba(218, 54, 51, 0.2);
+        color: #f85149;
+        border: 1px solid rgba(218, 54, 51, 0.4);
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .badge-warning {
+        background-color: rgba(210, 153, 34, 0.2);
+        color: #e3b341;
+        border: 1px solid rgba(210, 153, 34, 0.4);
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Load Artifacts via Dashboard Data Helpers
+# ---------------------------------------------------------
+# ARTIFACT LOADING VIA DASHBOARD DATA HELPERS
+# ---------------------------------------------------------
 config = load_config_data()
 dataset_summary = load_dataset_summary()
 manifest = load_experiment_manifest()
@@ -105,251 +245,355 @@ def load_trained_model():
 
 winning_model, feature_cols = load_trained_model()
 
-# Sidebar Header
-st.sidebar.image("https://img.icons8.com/isometric-line/100/security-checked.png", width=70)
-st.sidebar.title("SentinelPay Risk Engine")
-st.sidebar.caption("Track 02 — Defensive AI Risk Manager")
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("🔒 Experiment Settings")
-if manifest:
-    st.sidebar.markdown(f"**Dataset**: `{manifest['dataset_type'].upper()}`")
-    st.sidebar.markdown(f"**Split Strategy**: `{manifest['split']}`")
-    st.sidebar.markdown(f"**Winning Model**: `{manifest['winning_model']}`")
-    st.sidebar.markdown(f"**Locked Threshold**: `{manifest['locked_threshold']:.2f}`")
-    st.sidebar.caption(f"Prototype relative cost assumptions: FP = ${manifest['fp_cost']:.2f} | FN = ${manifest['fn_cost']:.2f}")
-else:
-    st.sidebar.error("Required evaluation artifact (experiment_manifest.json) not found. Run the evaluation pipeline before viewing this section.")
-
-# Main Header
-st.title("🛡️ SentinelPay — AI Risk Manager")
-st.markdown("""
-<div class="disclaimer-box">
-    <b>SIMULATED DATASET DISCLAIMER:</b> SentinelPay uses the simulated transaction dataset from the Fraud Detection Handbook. 
-    This system does NOT use or represent internal Razorpay data. Strictly defense-only.
+# ---------------------------------------------------------
+# SIDEBAR NAVIGATION & SYSTEM STATUS
+# ---------------------------------------------------------
+st.sidebar.markdown("""
+<div style="text-align: center; padding: 10px 0;">
+    <div style="font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">🛡️ SentinelPay</div>
+    <div style="font-size: 12px; color: #8b949e; font-weight: 600;">AI RISK COMMAND CENTER</div>
 </div>
 """, unsafe_allow_html=True)
 
-# Navigation Tabs (10 Required Sections)
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
-    "1. Dataset Overview",
-    "2. Class Imbalance",
-    "3. Model Comparison",
-    "4. Held-Out Test",
-    "5. Confusion Matrix",
-    "6. PR Curves",
-    "7. Threshold & Cost",
-    "8. Interactive Scoring",
-    "9. Merchant Spike Monitor",
-    "10. RAG Risk Verification"
-])
+st.sidebar.markdown("""
+<div style="background: rgba(35, 134, 54, 0.1); border: 1px solid rgba(35, 134, 54, 0.3); border-radius: 8px; padding: 10px; text-align: center; margin-bottom: 15px;">
+    <span class="badge-ready">🟢 SYSTEM READY</span>
+</div>
+""", unsafe_allow_html=True)
+
+st.sidebar.markdown("### 🔒 Active Experiment")
+if manifest:
+    st.sidebar.markdown(f"• **Dataset**: `Simulated Benchmark (60D)`")
+    st.sidebar.markdown(f"• **Split**: `70 / 15 / 15 Chronological`")
+    st.sidebar.markdown(f"• **Winning Model**: `{manifest['winning_model']}`")
+    st.sidebar.markdown(f"• **Locked Threshold ($t^*$)**: `{manifest['locked_threshold']:.2f}`")
+    st.sidebar.caption(f"Cost ratio: FP = ${manifest['fp_cost']:.2f} | FN = ${manifest['fn_cost']:.2f}")
+else:
+    st.sidebar.error("Experiment manifest not found. Run training pipeline.")
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 📍 Command Navigation")
+
+nav_choice = st.sidebar.radio(
+    "Go to section:",
+    [
+        "📊 OVERVIEW",
+        "📈 MODEL PERFORMANCE",
+        "⚡ DECISION ENGINE",
+        "🔍 LIVE SCORING",
+        "🚨 THREAT MONITORING",
+        "🤖 POLICY ASSISTANT"
+    ]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.caption("Razorpay AI Risk Manager (Track 02) • Defense-Only Prototype")
 
 # ---------------------------------------------------------
-# TAB 1: DATASET OVERVIEW
+# SECTION 1: OVERVIEW
 # ---------------------------------------------------------
-with tab1:
-    st.header("1. Dataset Overview & Data Leakage Prevention")
-    st.markdown("SentinelPay is built on the **Fraud Detection Handbook** benchmark dataset (*Baisholan et al., 2025*).")
-
-    if dataset_summary:
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Total Transactions", f"{dataset_summary['total_transactions']:,}")
-        col2.metric("Fraudulent Transactions", f"{dataset_summary['fraud_count']:,}", delta=f"{dataset_summary['fraud_percentage']:.3f}%")
-        col3.metric("Unique Customers", f"{dataset_summary['unique_customers']:,}")
-        col4.metric("Unique Terminals", f"{dataset_summary['unique_terminals']:,}")
-
-        st.info(f"**Dataset Time Range**: `{dataset_summary['min_timestamp']}` to `{dataset_summary['max_timestamp']}`")
-    else:
-        st.error("Required dataset summary not found. Run the dataset pipeline before viewing this section.")
-
-    st.subheader("Data Leakage Prevention Methodology")
+if nav_choice == "📊 OVERVIEW":
     st.markdown("""
-    - **Chronological Split Only**: Earliest 70% used for training, middle 15% for validation cost-tuning, latest 15% locked for final evaluation. No future transaction lookahead.
-    - **Retrospective Customer Features**: `CUSTOMER_ID_NB_TX_1DAY` and `CUSTOMER_ID_AVG_AMOUNT_1DAY` use strictly `closed='left'` rolling windows ending *before* transaction time $T$.
-    - **Delayed Terminal Fraud Risk**: Fraud label reporting incorporates a mandatory 7-day delay ($T - 7$ days offset) to account for chargeback notice latency.
-    - **Zero Synthetic Fallback**: Final metrics are computed exclusively on official transformed dataset benchmark files.
-    """)
+    <div class="hero-container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <div class="hero-title">SENTINELPAY AI RISK MANAGER</div>
+                <div class="hero-subtitle">Real-time transaction risk scoring and fraud intelligence powered by machine learning.</div>
+            </div>
+            <div>
+                <span class="badge-prototype">RESEARCH PROTOTYPE • DEFENSIVE AI</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="disclaimer-box">
+        <b>⚠️ SIMULATED DATASET & COMPETITION DISCLAIMER</b><br>
+        SentinelPay uses the official transformed credit card transaction dataset from the Fraud Detection Handbook. 
+        This prototype contains <b>zero</b> internal Razorpay payment data, merchant profiles, or proprietary rules. 
+        Cost parameters ($1.0 FP / $10.0 FN) are hypothetical defensive modeling assumptions. Strictly defense-only.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # KPI Cards Row
+    if dataset_summary and test_metrics:
+        k1, k2, k3, k4 = st.columns(4)
+        with k1:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">TOTAL TRANSACTIONS</div>
+                <div class="kpi-value">{dataset_summary['total_transactions']:,}</div>
+                <div class="kpi-subtext">60 Benchmark Days</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with k2:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">FRAUD RATE</div>
+                <div class="kpi-value">{dataset_summary['fraud_percentage']:.3f}%</div>
+                <div class="kpi-subtext">{dataset_summary['fraud_count']:,} Fraud Cases</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with k3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">HELD-OUT TEST PR-AUC</div>
+                <div class="kpi-value">{test_metrics['pr_auc']:.4f}</div>
+                <div class="kpi-subtext">Imbalance-Robust Metric</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with k4:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-label">TOTAL TEST COST</div>
+                <div class="kpi-value">${test_metrics['total_cost']:,.2f}</div>
+                <div class="kpi-subtext">At Locked t* = 0.31</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("### Why SentinelPay?")
+    p1, p2, p3 = st.columns(3)
+    with p1:
+        st.markdown("""
+        <div class="pillar-card">
+            <div class="pillar-num">01</div>
+            <div class="pillar-title">TRANSACTION RISK</div>
+            <div class="pillar-desc">Scores incoming payment transactions in real time using non-leaking behavioral and time-context signals.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with p2:
+        st.markdown("""
+        <div class="pillar-card">
+            <div class="pillar-num">02</div>
+            <div class="pillar-title">HISTORICAL INTELLIGENCE</div>
+            <div class="pillar-desc">Leverages customer and terminal transaction history with mandatory 7-day reporting delays (t ≤ T - 7D) to eliminate data leakage.</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with p3:
+        st.markdown("""
+        <div class="pillar-card">
+            <div class="pillar-num">03</div>
+            <div class="pillar-title">OPERATIONAL RESPONSE</div>
+            <div class="pillar-desc">Translates probabilities into cost-minimized decisions, terminal fraud-spike alerts, and grounded analyst verification.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("### 🔄 3-Layer Pipeline Architecture")
+    st.markdown("""
+    <div class="flow-container">
+        <div class="flow-node">TRANSACTION T</div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">RETROSPECTIVE FEATURE ENGINE</div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node active">XGBoost MODEL</div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">RISK SCORE</div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">LOCKED THRESHOLD (0.31)</div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-node">ACTION / ALERT</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("### 🧠 15 Model Features Matrix")
+    fc1, fc2, fc3 = st.columns(3)
+    with fc1:
+        st.markdown("#### Transaction Context")
+        st.markdown("• `TX_AMOUNT`: Amount in dollars\n• `log_tx_amount`: Log-scaled amount\n• `hour`: Hour of day (0-23)\n• `day_of_week`: Day of week (0-6)\n• `TX_DURING_WEEKEND`: Weekend binary flag\n• `TX_DURING_NIGHT`: Night hour flag (0-5)")
+    with fc2:
+        st.markdown("#### Customer History (`closed='left'`)")
+        st.markdown("• `CUSTOMER_ID_NB_TX_1DAY`: Past 1D tx count\n• `CUSTOMER_ID_AVG_AMOUNT_1DAY`: Past 1D mean amount\n• `CUSTOMER_ID_NB_TX_7DAY`: Past 7D tx count\n• `CUSTOMER_ID_AVG_AMOUNT_7DAY`: Past 7D mean amount\n• `CUSTOMER_ID_NB_TX_30DAY`: Past 30D tx count\n• `CUSTOMER_ID_AVG_AMOUNT_30DAY`: Past 30D mean amount")
+    with fc3:
+        st.markdown("#### Terminal History (7-Day Delay Offset)")
+        st.markdown("• `TERMINAL_ID_NB_TX_1DAY`: Past 1D terminal tx count\n• `TERMINAL_ID_RISK_7DAY_DELAYED`: Terminal fraud rate ($t \\le T - 7\\text{D}$)\n• `TERMINAL_ID_RISK_30DAY_DELAYED`: Terminal fraud rate ($t \\le T - 7\\text{D}$)")
+
+    st.markdown("---")
+    st.markdown("### 🔒 Methodology & Model Integrity Guarantees")
+    m1, m2, m3, m4, m5, m6 = st.columns(6)
+    m1.markdown("<span class=\"badge-ready\">✓ 70/15/15 Temporal Split</span>", unsafe_allow_html=True)
+    m2.markdown("<span class=\"badge-ready\">✓ No Future Data Leakage</span>", unsafe_allow_html=True)
+    m3.markdown("<span class=\"badge-ready\">✓ Target Independence</span>", unsafe_allow_html=True)
+    m4.markdown("<span class=\"badge-ready\">✓ Validation Cost Tuning</span>", unsafe_allow_html=True)
+    m5.markdown("<span class=\"badge-ready\">✓ Held-Out Test Evaluation</span>", unsafe_allow_html=True)
+    m6.markdown("<span class=\"badge-ready\">✓ Seed 42 Deterministic</span>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 2: CLASS IMBALANCE
+# SECTION 2: MODEL PERFORMANCE
 # ---------------------------------------------------------
-with tab2:
-    st.header("2. Class Imbalance Analysis")
-    st.markdown("Original class distribution preserved in validation and held-out test sets without synthetic oversampling on test data.")
-
-    if dataset_summary:
-        c1, c2 = st.columns([1, 1])
-        with c1:
-            st.markdown("#### Transaction Class Distribution")
-            labels = ['Legitimate (TX_FRAUD=0)', 'Fraudulent (TX_FRAUD=1)']
-            values = [dataset_summary['legitimate_count'], dataset_summary['fraud_count']]
-            fig_pie = px.pie(
-                names=labels, values=values, 
-                color_discrete_sequence=['#238636', '#da3633'],
-                hole=0.4, title=f"Original Class Imbalance ({dataset_summary['fraud_percentage']:.3f}% Fraud Rate)"
-            )
-            fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9')
-            st.plotly_chart(fig_pie, use_container_width=True)
-
-        with c2:
-            st.markdown("#### Imbalance Mitigation Strategy")
-            st.markdown("""
-            - **Class Weighting / scale_pos_weight**: Cost-aware loss weighting applied during Random Forest (`class_weight='balanced'`) and XGBoost (`scale_pos_weight=10.0`) training.
-            - **Precision-Recall Evaluation**: Primary selection evaluated via **PR-AUC** rather than misleading overall Accuracy.
-            - **Validation Threshold Optimization**: Decision threshold optimized specifically to minimize total business cost on Validation set.
-            """)
-    else:
-        st.error("Required dataset summary not found. Run dataset pipeline first.")
-
-# ---------------------------------------------------------
-# TAB 3: MODEL COMPARISON (VALIDATION SET)
-# ---------------------------------------------------------
-with tab3:
-    st.header("3. Validation Set Model Comparison")
-    st.markdown("Models evaluated on the 15% Validation set prior to threshold locking.")
+elif nav_choice == "📈 MODEL PERFORMANCE":
+    st.markdown("## 📈 Model Performance & Validation Selection")
+    st.markdown("### Why did we choose XGBoost?")
 
     if metrics and 'validation_results' in metrics:
         val_res = metrics['validation_results']
-        records = []
+        
+        # Prepare comparison data
+        comp_rows = []
         for m_name, res in val_res.items():
             m_data = res['val_metrics']
-            records.append({
+            comp_rows.append({
                 'Model': m_name,
-                'Optimal Threshold': res['optimal_threshold'],
-                'Validation Cost ($)': f"${m_data['cost']:,.2f}",
-                'PR-AUC': round(m_data['pr_auc'], 4),
-                'Precision': round(m_data['precision'], 4),
-                'Recall': round(m_data['recall'], 4),
-                'F1 Score': round(m_data['f1'], 4),
-                'False Positives': m_data['fp'],
-                'False Negatives': m_data['fn']
+                'PR-AUC': m_data['pr_auc'],
+                'Precision': m_data['precision'],
+                'Recall': m_data['recall'],
+                'F1 Score': m_data['f1'],
+                'Validation Cost ($)': m_data['cost'],
+                'Optimal Threshold': res['optimal_threshold']
             })
-        st.dataframe(pd.DataFrame(records), use_container_width=True)
-    else:
-        st.error("Required evaluation artifact (metrics.json) not found. Run the evaluation pipeline before viewing this section.")
+        comp_df = pd.DataFrame(comp_rows)
 
-# ---------------------------------------------------------
-# TAB 4: HELD-OUT TEST PERFORMANCE
-# ---------------------------------------------------------
-with tab4:
-    st.header("4. Held-Out Test Set Final Performance (Locked Model)")
-    st.markdown("Single evaluation on untouched 15% Test set using locked model & locked threshold.")
+        # Plotly Comparison Chart
+        c_left, c_right = st.columns([1.2, 1])
+        with c_left:
+            fig_comp = px.bar(
+                comp_df,
+                x='Model',
+                y=['PR-AUC', 'Precision', 'Recall', 'F1 Score'],
+                barmode='group',
+                title='Validation Performance Across Model Candidates',
+                color_discrete_sequence=['#58a6ff', '#3fb950', '#d29922', '#bc8cff']
+            )
+            fig_comp.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9')
+            st.plotly_chart(fig_comp, use_container_width=True)
 
+        with c_right:
+            fig_cost_bar = px.bar(
+                comp_df,
+                x='Model',
+                y='Validation Cost ($)',
+                title='Validation Business Cost Comparison (Lower is Better)',
+                color='Model',
+                color_discrete_map={'Logistic Regression': '#f85149', 'Random Forest': '#d29922', 'XGBoost': '#3fb950'},
+                text_auto='.2f'
+            )
+            fig_cost_bar.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9', showlegend=False)
+            st.plotly_chart(fig_cost_bar, use_container_width=True)
+
+        st.markdown("""
+        <div style="background: rgba(35, 134, 54, 0.1); border: 1px solid rgba(35, 134, 54, 0.3); border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+            <b>🏆 WINNER SELECTION REASONING:</b><br>
+            XGBoost achieved the lowest total business cost (<b>$2,510.00</b> vs Random Forest $2,646.00 and Logistic Regression $3,097.00) on the 15% Validation set. 
+            It was therefore selected as the winning classifier and locked for final test set evaluation.
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("### 🏆 Final Held-Out Test Set Results (Locked Model)")
+    
     if test_metrics:
         tm = test_metrics
-        mc1, mc2, mc3, mc4, mc5 = st.columns(5)
-        mc1.metric("Winning Model", tm['model_name'])
-        mc2.metric("Locked Threshold", f"{tm['locked_threshold']:.2f}")
-        mc3.metric("Test PR-AUC", f"{tm['pr_auc']:.4f}")
-        mc4.metric("Test F1 Score", f"{tm['f1']:.4f}")
-        mc5.metric("Total Test Cost", f"${tm['total_cost']:,.2f}")
+        t1, t2, t3, t4 = st.columns(4)
+        with t1:
+            st.metric("Test PR-AUC", f"{tm['pr_auc']:.4f}", help="Primary imbalance-robust metric")
+        with t2:
+            st.metric("Test Precision", f"{tm['precision']*100:.2f}%", help="55.22% of flagged alerts are true fraud")
+        with t3:
+            st.metric("Test Recall", f"{tm['recall']*100:.2f}%", help="74.47% of total fraud caught")
+        with t4:
+            st.metric("Test F1 Score", f"{tm['f1']:.4f}", help="Harmonic mean")
 
-        st.markdown("---")
-        c_p, c_r = st.columns(2)
-        c_p.metric("Test Precision", f"{tm['precision']:.4f}", help="TP / (TP + FP)")
-        c_r.metric("Test Recall", f"{tm['recall']:.4f}", help="TP / (TP + FN)")
-    else:
-        st.error("Required evaluation artifact (metrics.json -> test_metrics) not found. Run the evaluation pipeline before viewing this section.")
+        st.markdown(f"### **Total Test Business Cost**: `${tm['total_cost']:,.2f}` (At Locked Threshold $t^* = {tm['locked_threshold']:.2f}$)")
 
-# ---------------------------------------------------------
-# TAB 5: CONFUSION MATRIX
-# ---------------------------------------------------------
-with tab5:
-    st.header("5. Test Set Confusion Matrix")
-    st.markdown("Breakdown of predictions on held-out test data at locked threshold.")
-
-    if test_metrics and manifest:
-        tm = test_metrics
+        # Confusion Matrix Heatmap
         cm_data = [[tm['tn'], tm['fp']], [tm['fn'], tm['tp']]]
-        
         fig_cm = px.imshow(
             cm_data,
             labels=dict(x="Predicted Label", y="Actual Label", color="Count"),
             x=['Legitimate (0)', 'Fraud (1)'],
             y=['Legitimate (0)', 'Fraud (1)'],
             text_auto=True,
-            color_continuous_scale='Blues'
+            color_continuous_scale='Blues',
+            title='Held-Out Test Set Confusion Matrix'
         )
         fig_cm.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9')
-        
-        c1, c2 = st.columns([1, 1])
-        with c1:
+
+        col_cm1, col_cm2 = st.columns([1, 1])
+        with col_cm1:
             st.plotly_chart(fig_cm, use_container_width=True)
-        with c2:
-            st.markdown("#### Metric Interpretation")
-            st.markdown(f"- **True Negatives (TN)**: `{tm['tn']:,}` legitimate transactions correctly approved.")
-            st.markdown(f"- **False Positives (FP)**: `{tm['fp']:,}` false alerts (Cost: `{tm['fp']} x ${manifest['fp_cost']} = ${tm['fp']*manifest['fp_cost']:,.2f}`).")
-            st.markdown(f"- **False Negatives (FN)**: `{tm['fn']:,}` missed frauds (Cost: `{tm['fn']} x ${manifest['fn_cost']} = ${tm['fn']*manifest['fn_cost']:,.2f}`).")
-            st.markdown(f"- **True Positives (TP)**: `{tm['tp']:,}` frauds detected successfully.")
-    else:
-        st.error("Required evaluation artifact not found. Run the evaluation pipeline before viewing this section.")
+        with col_cm2:
+            st.markdown("#### Test Confusion Matrix Breakdown")
+            st.markdown(f"• **True Positives (TP)**: `{tm['tp']}` frauds detected successfully.")
+            st.markdown(f"• **False Positives (FP)**: `{tm['fp']}` false alarms (Cost: `{tm['fp']} x $1.0 = ${tm['fp']*1.0:,.2f}`).")
+            st.markdown(f"• **False Negatives (FN)**: `{tm['fn']}` missed frauds (Cost: `{tm['fn']} x $10.0 = ${tm['fn']*10.0:,.2f}`).")
+            st.markdown(f"• **True Negatives (TN)**: `{tm['tn']:,}` legitimate transactions correctly approved.")
+            st.caption("Evaluation performed strictly ONCE on the untouched chronological test set.")
 
 # ---------------------------------------------------------
-# TAB 6: PR CURVES
+# SECTION 3: DECISION ENGINE & THRESHOLD OPTIMIZATION
 # ---------------------------------------------------------
-with tab6:
-    st.header("6. Precision-Recall Curves (PR-AUC)")
-    st.markdown("PR curves generated directly from evaluated threshold points on Validation data.")
+elif nav_choice == "⚡ DECISION ENGINE":
+    st.markdown("## ⚡ Decision Engine & Threshold Optimization")
+    st.markdown("""
+    In financial fraud detection, decision thresholds must balance false-alarm operational cost vs uncaptured fraud loss:
     
-    if metrics and 'cost_curves' in metrics and 'validation_results' in metrics:
-        fig_pr = go.Figure()
-        for m_name, curve in metrics['cost_curves'].items():
-            pr_val = metrics['validation_results'][m_name]['val_metrics']['pr_auc']
-            recalls = [item['recall'] for item in curve]
-            precisions = [item['precision'] for item in curve]
-            fig_pr.add_trace(go.Scatter(
-                x=recalls, y=precisions, mode='lines+markers',
-                name=f"{m_name} (PR-AUC: {pr_val:.4f})"
-            ))
-        
-        fig_pr.update_layout(
-            title="Validation PR Curves",
-            xaxis_title="Recall", yaxis_title="Precision",
-            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9'
-        )
-        st.plotly_chart(fig_pr, use_container_width=True)
-    else:
-        st.error("Required evaluation artifact (metrics.json -> cost_curves) not found. Run the evaluation pipeline before viewing this section.")
+    `Total Cost = (FP × FP_COST) + (FN × FN_COST)  where FP_COST = $1.0, FN_COST = $10.0`
+    """)
 
-# ---------------------------------------------------------
-# TAB 7: THRESHOLD & COST TRADE-OFF
-# ---------------------------------------------------------
-with tab7:
-    st.header("7. Threshold & Cost Minimization Trade-off Curve")
-    
     curve, winning_model_name, locked_thresh = load_threshold_analysis()
-    if curve and winning_model_name and manifest:
-        st.markdown(f"Primary Objective: Minimize expected business cost on Validation set ($FP \\times \\${manifest['fp_cost']:.2f} + FN \\times \\${manifest['fn_cost']:.2f}$).")
+    if curve and manifest:
         curve_df = pd.DataFrame(curve)
-        
-        fig_cost = px.line(
-            curve_df, x='threshold', y='cost',
-            title=f"Validation Cost Minimization Curve ({winning_model_name})",
-            labels={'threshold': 'Decision Threshold (t)', 'cost': 'Total Business Cost ($)'}
-        )
-        
-        fig_cost.add_vline(x=locked_thresh, line_dash="dash", line_color="#da3633", annotation_text=f"Locked t* = {locked_thresh:.2f}")
-        fig_cost.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9')
-        
-        st.plotly_chart(fig_cost, use_container_width=True)
+
+        c_curve, c_pr = st.columns(2)
+        with c_curve:
+            fig_cost = px.line(
+                curve_df, x='threshold', y='cost',
+                title=f"Validation Business Cost vs Decision Threshold ({winning_model_name})",
+                labels={'threshold': 'Decision Threshold (t)', 'cost': 'Total Expected Business Cost ($)'}
+            )
+            fig_cost.add_vline(x=locked_thresh, line_dash="dash", line_color="#f85149", annotation_text=f"Locked t* = {locked_thresh:.2f}")
+            fig_cost.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9')
+            st.plotly_chart(fig_cost, use_container_width=True)
+
+        with c_pr:
+            if metrics and 'cost_curves' in metrics:
+                fig_pr = go.Figure()
+                for m_name, c_data in metrics['cost_curves'].items():
+                    pr_val = metrics['validation_results'][m_name]['val_metrics']['pr_auc']
+                    recalls = [item['recall'] for item in c_data]
+                    precisions = [item['precision'] for item in c_data]
+                    fig_pr.add_trace(go.Scatter(
+                        x=recalls, y=precisions, mode='lines',
+                        name=f"{m_name} (PR-AUC: {pr_val:.4f})"
+                    ))
+                fig_pr.update_layout(
+                    title="Validation Precision-Recall (PR) Curves",
+                    xaxis_title="Recall", yaxis_title="Precision",
+                    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='#c9d1d9'
+                )
+                st.plotly_chart(fig_pr, use_container_width=True)
+
+    st.markdown("---")
+    st.markdown("### 🎛️ Interactive Threshold Decision Simulator")
+    sim_prob = st.slider("Simulated Model Fraud Probability Output", 0.0, 1.0, 0.45, 0.01)
+    locked_t = manifest['locked_threshold'] if manifest else 0.31
+
+    d1, d2, d3 = st.columns(3)
+    d1.metric("Predicted Fraud Probability", f"{sim_prob*100:.1f}%")
+    d2.metric("Locked Operational Threshold (t*)", f"{locked_t*100:.1f}%")
+    
+    if sim_prob >= locked_t:
+        d3.markdown("<div style='margin-top: 15px;'><span class='badge-danger'>HIGH RISK — BLOCK / REVIEW</span></div>", unsafe_allow_html=True)
+    elif sim_prob >= (locked_t * 0.7):
+        d3.markdown("<div style='margin-top: 15px;'><span class='badge-warning'>MEDIUM RISK — ELEVATE MONITORING</span></div>", unsafe_allow_html=True)
     else:
-        st.error("Required evaluation artifact (metrics.json -> cost_curves) not found. Run the evaluation pipeline before viewing this section.")
+        d3.markdown("<div style='margin-top: 15px;'><span class='badge-success'>LOW RISK — AUTOMATIC APPROVE</span></div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 8: INTERACTIVE TRANSACTION RISK SCORING
+# SECTION 4: LIVE SCORING
 # ---------------------------------------------------------
-with tab8:
-    st.header("8. Interactive Transaction Risk Scoring")
-    st.markdown("Score custom transaction parameters using the locked trained model.")
+elif nav_choice == "🔍 LIVE SCORING":
+    st.markdown("## 🔍 Real-Time Transaction Risk Analyst Tool")
+    st.markdown("Input transaction parameters to compute live risk scores via the locked trained XGBoost classifier.")
 
     if winning_model and feature_cols and manifest:
-        ic1, ic2, ic3 = st.columns(3)
-        tx_amt = ic1.number_input("Transaction Amount ($)", min_value=1.0, max_value=5000.0, value=350.0)
-        tx_hour = ic2.slider("Hour of Day (0-23)", 0, 23, 2)
-        cust_1d_tx = ic3.number_input("Customer 1-Day Tx Count", min_value=0, max_value=50, value=1)
+        l1, l2, l3 = st.columns(3)
+        tx_amt = l1.number_input("Transaction Amount ($)", min_value=1.0, max_value=10000.0, value=450.0)
+        tx_hour = l2.slider("Hour of Transaction (0-23)", 0, 23, 3)
+        cust_1d_tx = l3.number_input("Customer Past 1-Day Transaction Volume", min_value=0, max_value=50, value=2)
 
-        ic4, ic5 = st.columns(2)
-        term_risk = ic4.slider("Delayed Terminal 7-Day Risk Rate", 0.0, 1.0, 0.05)
+        l4, l5 = st.columns(2)
+        term_risk = l4.slider("Delayed Terminal 7-Day Fraud Risk Rate", 0.0, 1.0, 0.12)
         night_flag = 1 if tx_hour in [0, 1, 2, 3, 4, 5] else 0
 
         input_data = pd.DataFrame([{
@@ -365,61 +609,87 @@ with tab8:
             'CUSTOMER_ID_AVG_AMOUNT_7DAY': tx_amt,
             'CUSTOMER_ID_NB_TX_30DAY': cust_1d_tx,
             'CUSTOMER_ID_AVG_AMOUNT_30DAY': tx_amt,
-            'TERMINAL_ID_NB_TX_1DAY': 5,
+            'TERMINAL_ID_NB_TX_1DAY': 6,
             'TERMINAL_ID_RISK_7DAY_DELAYED': term_risk,
             'TERMINAL_ID_RISK_30DAY_DELAYED': term_risk
         }])[feature_cols]
 
-        if st.button("Calculate Fraud Risk Score", type="primary"):
+        if st.button("Score Transaction", type="primary"):
             prob = float(winning_model.predict_proba(input_data)[0, 1])
             locked_t = manifest['locked_threshold']
             is_fraud = prob >= locked_t
 
             st.markdown("---")
-            sc1, sc2, sc3 = st.columns(3)
-            sc1.metric("Predicted Fraud Probability", f"{prob*100:.2f}%")
-            sc2.metric("Locked Threshold", f"{locked_t*100:.2f}%")
-            sc3.markdown(f"**Decision**: {'<span class=\"badge-danger\">REJECT / FRAUD ALERT</span>' if is_fraud else '<span class=\"badge-success\">APPROVE / LOW RISK</span>'}", unsafe_allow_html=True)
+            res1, res2, res3 = st.columns(3)
+            res1.metric("Predicted Fraud Risk Score", f"{prob*100:.2f}%")
+            res2.metric("Decision Threshold", f"{locked_t*100:.2f}%")
+            if is_fraud:
+                res3.markdown("<div style='margin-top: 15px;'><span class='badge-danger'>ACTION: BLOCK TRANSACTION / FLAG FOR REVIEW</span></div>", unsafe_allow_html=True)
+            else:
+                res3.markdown("<div style='margin-top: 15px;'><span class='badge-success'>ACTION: APPROVE TRANSACTION</span></div>", unsafe_allow_html=True)
+
+            st.markdown("#### Analyst Signal Interpretation")
+            st.markdown(f"• **Night Time Transaction**: `{'Yes (Night Hour ' + str(tx_hour) + ')' if night_flag else 'No'}`\n• **Historical Terminal Fraud Rate**: `{term_risk*100:.1f}%` (Delayed 7-day reporting offset enforced)\n• **Customer 1-Day Activity**: `{cust_1d_tx}` transactions")
     else:
-        st.error("Required model artifacts (winning_model.joblib) not found. Run model training before using interactive scoring.")
+        st.error("Model artifacts not available. Train models first.")
 
 # ---------------------------------------------------------
-# TAB 9: MERCHANT SPIKE MONITOR
+# SECTION 5: THREAT MONITORING
 # ---------------------------------------------------------
-with tab9:
-    st.header("9. Merchant / Terminal Fraud-Spike Alert Center")
-
-    min_vol = config.get('spike_detector', {}).get('min_transactions', 10) if config else 10
-    st.markdown(f"Monitors terminal baseline fraud rate vs. recent 7-day monitoring window rate (`MIN_TX_COUNT` volume guard = `{min_vol}`).")
+elif nav_choice == "🚨 THREAT MONITORING":
+    st.markdown("## 🚨 Merchant & Terminal Fraud-Spike Alert Center")
+    st.markdown("Monitors terminal baseline fraud rates (30D) vs recent 7-day monitoring window rates to identify compromised merchant terminals.")
 
     spikes = load_spike_results()
     if spikes is not None:
-        sc1, sc2, sc3, sc4 = st.columns(4)
-        sc1.metric("High Spike Terminals", len(spikes[spikes['alert_status'] == 'ALERT_HIGH']))
-        sc2.metric("Elevated Terminals", len(spikes[spikes['alert_status'] == 'ALERT_ELEVATED']))
-        sc3.metric("Normal Terminals", len(spikes[spikes['alert_status'] == 'NORMAL']))
-        sc4.metric("Low Volume Filtered", len(spikes[spikes['alert_status'] == 'INSUFFICIENT_VOLUME']))
+        s1, s2, s3, s4 = st.columns(4)
+        s1.metric("High Spike Alerts (≥3.0x)", len(spikes[spikes['alert_status'] == 'ALERT_HIGH']))
+        s2.metric("Elevated Alerts (≥1.5x)", len(spikes[spikes['alert_status'] == 'ALERT_ELEVATED']))
+        s3.metric("Normal Terminals", len(spikes[spikes['alert_status'] == 'NORMAL']))
+        s4.metric("Filtered Low Volume", len(spikes[spikes['alert_status'] == 'INSUFFICIENT_VOLUME']))
 
-        st.subheader("Top Merchant Fraud Spike Alerts")
-        st.dataframe(spikes[spikes['alert_status'].isin(['ALERT_HIGH', 'ALERT_ELEVATED'])], use_container_width=True)
+        st.markdown("---")
+        st.markdown("### ⚠ Top Active Terminal Fraud Spike Alerts")
+        active_spikes = spikes[spikes['alert_status'].isin(['ALERT_HIGH', 'ALERT_ELEVATED'])].head(10)
+        
+        if len(active_spikes) > 0:
+            for idx, row in active_spikes.iterrows():
+                badge_class = "badge-danger" if row['alert_status'] == 'ALERT_HIGH' else "badge-warning"
+                st.markdown(f"""
+                <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(48, 54, 61, 0.8); border-radius: 8px; padding: 14px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <b style="font-size: 16px; color: #f0f6fc;">Terminal ID: {row['TERMINAL_ID']}</b><br>
+                            <span style="font-size: 13px; color: #8b949e;">Recent Fraud Rate: {row['monitoring_fraud_rate']*100:.2f}% | Baseline Fraud Rate: {row['baseline_fraud_rate']*100:.2f}%</span>
+                        </div>
+                        <div>
+                            <span style="font-size: 18px; font-weight: 800; color: #58a6ff; margin-right: 15px;">Spike Ratio: {row['spike_ratio']:.2f}x</span>
+                            <span class="{badge_class}">{row['alert_status']}</span>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No active high-risk fraud spikes detected.")
     else:
-        st.error("Required dataset or spike detection pipeline not available.")
+        st.error("Spike detection dataset or pipeline not available.")
 
 # ---------------------------------------------------------
-# TAB 10: RAG RISK VERIFICATION
+# SECTION 6: POLICY ASSISTANT
 # ---------------------------------------------------------
-with tab10:
-    st.header("10. RAG Risk Verification Assistant (Defense-Only)")
-    st.markdown("Grounds model outputs against internal risk policies. *RAG is strictly downstream and does not alter ML predictions.*")
+elif nav_choice == "🤖 POLICY ASSISTANT":
+    st.markdown("## 🤖 Grounded Risk Policy Verification Assistant")
+    st.markdown("Grounds model outputs and analyst decisions against internal defensive risk documentation (`documents/risk_policies.json`). *RAG is strictly downstream and cannot alter ML predictions or thresholds.*")
 
-    query_input = st.text_input("Enter policy verification query or incident context:", value="How to handle merchant terminal fraud spike?")
-    
-    if st.button("Run Grounded RAG Query"):
+    query_input = st.text_input("Enter policy query or operational incident question:", value="How to handle merchant terminal fraud spike?")
+
+    if st.button("Query Policy Knowledge Base", type="primary"):
         res = rag_engine.retrieve(query_input, top_k=2)
-        st.subheader("Retrieved Policy Documents")
+        st.markdown("---")
+        st.markdown("### 📚 Retrieved Grounded Policy Documents")
         for item in res:
-            with st.expander(f"[{item['policy_id']}] {item['title']} ({item['category']})"):
-                st.markdown(f"**Content**: {item['content']}")
-                st.markdown(f"**Required Action**: {item['action']}")
+            with st.expander(f"[{item['policy_id']}] {item['title']} ({item['category']})", expanded=True):
+                st.markdown(f"**Policy Content**: {item['content']}")
+                st.markdown(f"**Mandatory Analyst Action**: {item['action']}")
                 if 'relevance_score' in item:
-                    st.caption(f"Vector Similarity Score: {item['relevance_score']:.4f}")
+                    st.caption(f"Semantic Similarity Match Score: {item['relevance_score']:.4f}")
