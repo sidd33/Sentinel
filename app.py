@@ -660,7 +660,7 @@ elif nav_choice == "🚨 THREAT MONITORING":
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <b style="font-size: 16px; color: #f0f6fc;">Terminal ID: {row['TERMINAL_ID']}</b><br>
-                            <span style="font-size: 13px; color: #8b949e;">Recent Fraud Rate: {row['monitoring_fraud_rate']*100:.2f}% | Baseline Fraud Rate: {row['baseline_fraud_rate']*100:.2f}%</span>
+                            <span style="font-size: 13px; color: #8b949e;">Recent Fraud Rate: {row['mon_fraud_rate']*100:.2f}% | Baseline Fraud Rate: {row['base_fraud_rate']*100:.2f}%</span>
                         </div>
                         <div>
                             <span style="font-size: 18px; font-weight: 800; color: #58a6ff; margin-right: 15px;">Spike Ratio: {row['spike_ratio']:.2f}x</span>
