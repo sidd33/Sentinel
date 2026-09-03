@@ -77,25 +77,25 @@ To guarantee operational validity and zero data leakage:
 
 Because fraud loss heavily outweighs manual investigation effort, decision thresholds are optimized on the **Validation set** to minimize total business cost:
 
-$$\text{Total Cost} = \text{FP} \times \text{FP\_COST} + \text{FN} \times \text{FN\_COST}$$
+`Total Cost = (FP × FP_COST) + (FN × FN_COST)`
 
 - **Hypothetical Cost Assumptions**:
-  - $\text{FP\_COST} = \$1.0$ (Manual review / analyst verification effort)
-  - $\text{FN\_COST} = \$10.0$ (Uncaptured fraud loss ratio)
+  - `FP_COST` = `$1.0` (Manual review / analyst verification effort)
+  - `FN_COST` = `$10.0` (Uncaptured fraud loss ratio)
 - **Locked Threshold Protocol**: Once threshold $t^*$ is selected on Validation cost minimization, it is permanently locked in `artifacts/experiment_manifest.json` before performing a single evaluation on the untouched held-out Test set.
 
 ### 🏆 Official Final Experiment Results (Held-Out Test Set)
 
 | Metric / Parameter | Value | Details |
 | :--- | :---: | :--- |
-| **Winning Model** | **XGBoost** | Selected via Validation set cost minimization ($\$2,510.00$) |
-| **Locked Threshold ($t^*$)** | **$0.31$** ($0.306969...$) | Locked on Validation cost curve minimization |
-| **Test PR-AUC** | **$0.7101$** | Primary imbalance-robust evaluation metric |
-| **Test Precision** | **$0.5522$** | $55.22\%$ of flagged alerts are true fraud |
-| **Test Recall** | **$0.7447$** | $74.47\%$ of all fraud transactions caught |
-| **Test F1 Score** | **$0.6342$** | Harmonic mean of precision and recall |
-| **Test Total Cost** | **$\$2,399.00$** | $\text{FP}=459 \times \$1.0 + \text{FN}=194 \times \$10.0$ |
-| **Test Confusion Matrix** | $\text{TP}=566, \text{FP}=459, \text{FN}=194, \text{TN}=85,145$ | Evaluated on $86,364$ held-out test transactions |
+| **Winning Model** | **XGBoost** | Selected via Validation set cost minimization ($2,510.00) |
+| **Locked Threshold ($t^*$)** | **0.31** (0.306969...) | Locked on Validation cost curve minimization |
+| **Test PR-AUC** | **0.7101** | Primary imbalance-robust evaluation metric |
+| **Test Precision** | **0.5522** | 55.22% of flagged alerts are true fraud |
+| **Test Recall** | **0.7447** | 74.47% of all fraud transactions caught |
+| **Test F1 Score** | **0.6342** | Harmonic mean of precision and recall |
+| **Test Total Cost** | **$2,399.00** | FP = 459 × $1.0 + FN = 194 × $10.0 |
+| **Test Confusion Matrix** | TP = 566, FP = 459, FN = 194, TN = 85,145 | Evaluated on 86,364 held-out test transactions |
 
 ---
 
