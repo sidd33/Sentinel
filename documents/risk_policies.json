@@ -1,0 +1,58 @@
+[
+  {
+    "policy_id": "POL-RISK-001",
+    "title": "High-Value Transaction Threshold Verification",
+    "category": "Transaction Monitoring",
+    "content": "Transactions exceeding $250.00 with customer historical transaction count under 2 in 24 hours must trigger automated secondary risk assessment. Analysts must check if the transaction occurs outside normal customer operating hours (23:00 - 05:00) and verify terminal velocity.",
+    "rules": [
+      "Amount > $250.00",
+      "Customer 1-Day Tx Count < 2",
+      "Night transaction flag active"
+    ],
+    "action": "Flag for manual verification or stepped-up authentication (3D Secure / OTP)."
+  },
+  {
+    "policy_id": "POL-RISK-002",
+    "title": "Terminal Fraud-Spike Containment Protocol",
+    "category": "Merchant Defense",
+    "content": "When a merchant terminal exhibits a 7-day fraud rate spike ratio >= 3.0x over its 30-day baseline with a minimum volume of 10 transactions, the terminal is classified as ALERT_HIGH. Defensive protocol mandates temporary hold on settlement payouts and proactive merchant outbound audit.",
+    "rules": [
+      "Terminal 7-Day Fraud Rate / Baseline Fraud Rate >= 3.0",
+      "Monitoring window volume >= 10 transactions"
+    ],
+    "action": "Restrict payouts, notify Merchant Risk Operations, request invoice & fulfillment proof."
+  },
+  {
+    "policy_id": "POL-RISK-003",
+    "title": "Chargeback Defense & Dispute Evidence Checklist",
+    "category": "Chargeback Protection",
+    "content": "For disputed transactions flagged under fraud code 10.4 (Card-Not-Present Fraud), merchants must submit compelling evidence within 7 calendar days: IP address log matching cardholder billing country, AVS (Address Verification System) response code 'Y', signed delivery receipt, and customer communication records.",
+    "rules": [
+      "Dispute Code 10.4 / Fraud Chargeback",
+      "Submission SLA: 7 calendar days"
+    ],
+    "action": "Compile compelling evidence package via Razorpay Merchant Dashboard and submit to acquiring bank."
+  },
+  {
+    "policy_id": "POL-RISK-004",
+    "title": "Cost-Sensitive Fraud Risk Scoring Standard",
+    "category": "ML Governance",
+    "content": "SentinelPay operates on cost-sensitive risk evaluation where False Negative cost (FN_COST=$10) heavily outweighs False Positive cost (FP_COST=$1). ML decision thresholds are locked strictly on validation set cost curves. RAG engines are strictly prohibited from altering ML probability scores.",
+    "rules": [
+      "Authoritative ML Score takes precedence",
+      "Threshold set by validation cost curve minimization"
+    ],
+    "action": "Expose ML score, model feature importances, and locked decision threshold without post-hoc score modification."
+  },
+  {
+    "policy_id": "POL-RISK-005",
+    "title": "Delayed Fraud Reporting & Velocity Anomaly Handling",
+    "category": "Data Integrity",
+    "content": "Merchant historical risk metrics incorporate a mandatory 7-day label reporting delay to reflect real-world chargeback notice latency. Rapid velocity spikes (e.g., > 5 transactions in 1 hour per customer) trigger high risk prior to label confirmation.",
+    "rules": [
+      "Customer 1-Hour Velocity > 5",
+      "Label delay offset = 7 days"
+    ],
+    "action": "Apply immediate velocity throttling."
+  }
+]

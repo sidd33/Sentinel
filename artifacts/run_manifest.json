@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-09-03T19:11:46.583945+00:00",
+  "python_version": "3.13.7",
+  "pandas_version": "2.3.2",
+  "numpy_version": "2.3.3",
+  "scikit_learn_version": "1.7.2",
+  "xgboost_version": "3.4.1",
+  "joblib_version": "1.5.2",
+  "random_seed": 42,
+  "dataset_scope": "60 chronological days (2018-04-01 through 2018-05-30)",
+  "total_transactions": 575755,
+  "fraud_count": 4263,
+  "legitimate_count": 571492,
+  "feature_list": [
+    "TX_AMOUNT",
+    "log_tx_amount",
+    "hour",
+    "day_of_week",
+    "TX_DURING_WEEKEND",
+    "TX_DURING_NIGHT",
+    "CUSTOMER_ID_NB_TX_1DAY",
+    "CUSTOMER_ID_AVG_AMOUNT_1DAY",
+    "CUSTOMER_ID_NB_TX_7DAY",
+    "CUSTOMER_ID_AVG_AMOUNT_7DAY",
+    "CUSTOMER_ID_NB_TX_30DAY",
+    "CUSTOMER_ID_AVG_AMOUNT_30DAY",
+    "TERMINAL_ID_NB_TX_1DAY",
+    "TERMINAL_ID_RISK_7DAY_DELAYED",
+    "TERMINAL_ID_RISK_30DAY_DELAYED"
+  ],
+  "model_candidates": [
+    "Logistic Regression",
+    "Random Forest",
+    "XGBoost"
+  ],
+  "fp_cost": 1.0,
+  "fn_cost": 10.0
+}

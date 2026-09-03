@@ -1,0 +1,14 @@
+{
+  "dataset_source": "Official Fraud Detection Handbook simulated transaction dataset",
+  "subset_days": 60,
+  "start_date": "2018-04-01 00:00:31",
+  "end_date": "2018-05-30 23:59:45",
+  "total_transactions": 575755,
+  "fraud_count": 4263,
+  "legitimate_count": 571492,
+  "fraud_percentage": 0.7404191018749294,
+  "unique_customers": 4979,
+  "unique_terminals": 10000,
+  "min_timestamp": "2018-04-01 00:00:31",
+  "max_timestamp": "2018-05-30 23:59:45"
+}

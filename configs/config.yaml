@@ -1,0 +1,44 @@
+random_seed: 42
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+cost:
+  false_positive: 1.0
+  false_negative: 10.0
+  description: "Hypothetical prototype cost assumptions: FP = $1 manual review cost, FN = $10 average fraud loss ratio."
+
+spike_detector:
+  min_transactions: 10
+  monitoring_window_days: 7
+  baseline_window_days: 30
+  high_spike_threshold: 3.0
+  elevated_spike_threshold: 1.8
+
+dataset:
+  source: "Official Fraud Detection Handbook"
+  repo_url: "https://raw.githubusercontent.com/Fraud-Detection-Handbook/simulated-data-transformed/main/data/"
+  subset_days: 60
+  start_date: "2018-04-01"
+  end_date: "2018-05-30"
+  description: "60-day chronological subset of the official Fraud Detection Handbook simulated dataset (2018-04-01 to 2018-05-30) for computationally reproducible execution."
+
+models:
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+    class_weight: "balanced"
+
+  random_forest:
+    n_estimators: 100
+    max_depth: 12
+    min_samples_split: 10
+    class_weight: "balanced"
+
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    scale_pos_weight: 10.0

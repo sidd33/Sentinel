@@ -1,0 +1,17 @@
+{
+  "train_start": "2018-04-01 00:00:31",
+  "train_end": "2018-05-12 22:25:55",
+  "validation_start": "2018-05-12 22:26:11",
+  "validation_end": "2018-05-21 20:13:53",
+  "test_start": "2018-05-21 20:13:57",
+  "test_end": "2018-05-30 23:59:45",
+  "train_count": 403028,
+  "validation_count": 86363,
+  "test_count": 86364,
+  "train_fraud_count": 2748,
+  "validation_fraud_count": 755,
+  "test_fraud_count": 760,
+  "train_fraud_rate": 0.006818384826860664,
+  "validation_fraud_rate": 0.008742169679145003,
+  "test_fraud_rate": 0.008799962947524432
+}
