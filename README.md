@@ -1,6 +1,5 @@
 # SentinelPay — AI Risk Manager
 
-[![Track 02](https://img.shields.io/badge/Razorpay_AI_Risk_Manager-Track_02-blue.svg)](https://razorpay.com)
 [![License](https://img.shields.io/badge/License-Defense--Only-green.svg)]()
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-brightgreen.svg)]()
 
