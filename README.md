@@ -28,7 +28,7 @@ Primary academic baseline:
 Key methodological principles adopted from the paper:
 1. **Original Class Imbalance**: Preserving natural fraud distribution (~0.74%) without applying artificial oversampling (e.g. SMOTE) to test evaluations.
 2. **Imbalance-Robust Evaluation**: Utilizing **PR-AUC**, Precision, Recall, and F1-score as primary metrics rather than misleading overall Accuracy.
-3. **Cost-Sensitive Optimization**: Selecting operating decision thresholds based on explicit business cost trade-offs ($\text{FP\_COST} = \$1.0$, $\text{FN\_COST} = \$10.0$).
+3. **Cost-Sensitive Optimization**: Selecting operating decision thresholds based on explicit business cost trade-offs FP_COST = $1.0$, FN_COST = $10.0$).
 4. **Data Leakage Prevention**: Enforcing strict temporal splitting and retrospective rolling feature windows with realistic label reporting delays.
 
 ---
